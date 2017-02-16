@@ -1,0 +1,123 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+
+
+<head><title>CAS CS 585  - Fall 2015</title>
+
+		
+<link rel="stylesheet" href="../../../research/css/stylesheet.css"
+type="text/css" media="screen" >
+
+</HEAD>
+
+<BODY bgcolor = "white">
+
+<center>
+<a href="http://www.bu.edu"><img border="0" src="http://www.cs.bu.edu/fac/betke/images/bu-logo.gif"
+width="119" height="120"></a>
+
+
+<h2> CAS CS 440/660 Artificial Intelligence  - Spring 2017</h2> 
+</center>
+
+
+This assignment is due on Friday, February 24, at 00:00 EST (i.e. the night
+from Friday to Saturday). You are encouraged to work in teams of two to four
+students.  Each student must submit code along with the report.
+
+<h4>
+<strong>Programming Assignment 1</strong></h4>
+
+<p>
+In this assignment, you will build upon the ideas you learned in class and in
+the labs. Your team will design
+and implement a simple neural network and train it on 3 different datasets.
+</p>
+
+<p>
+Each team must write a webpage report on the assignment.  Use, for example,
+the provided template as a starting point and make sure to answer all questions asked below. To ensure that each team member builds his or her own
+electronic portfolio, we ask that everybody submit his or her own report.
+</p>
+
+<strong>Learning Objectives</strong>
+
+<ol>
+<li> Understand how neural networks work. </li>
+
+<li> Implement a logistic regression classifier, and a neural network classifier.</li>
+
+<li> Understand the role of different parameters of a neural network, such
+  as learning rate. </li>
+
+ <li> Learn how to evaluate a classifier using metrics like classification accuracy and confusion matrices. </li>
+</ol>
+
+
+<p>
+<ol><br><br>
+<strong>Logistic Regression</strong>
+<li> Using the skeleton code provided in LogisticRegression.py, implement a logistic regression classifier. You will have to implement 3
+  functions: compute_cost(), predict() and fit(). Train this model using
+  the dataset 'Linear' and visualize the decision
+  boundary learned by your model. <b>(10 pts)</b>
+<li> Now, train your logistic regression classifier using the dataset 'NonLinear' and visualize the decision boundary learned by your
+  model. Can your logistic regression classifier learn non-linear decision
+  boundaries? Why or why not? <b>(10 pts)</b>
+<br><br>
+<strong>Neural Networks</strong>
+<li> Implement a neural network class with 1 hidden layer in a separate NeuralNet.py file. Train this model
+  using the dataset 'Linear' and visualize the
+  decision boundary learned by your model. Then, train your neural network
+  model using the dataset 'NonLinear' and visualize the
+  decision boundary learned by your model. Can your neural network
+  model (with one hidden layer) learn non-linear decision boundaries? Why
+  or why not? <b>(20 pts)</b>
+<li> What effect does learning rate have on how your neural network is
+  trained? Illustrate your answer by training your model using different
+  learning rates. Provide plots illustrating the total cost of your model over time for different settings of the learning rate. <b>(10 pts)</b>
+<li> What effect does the number of nodes in the hidden layer have on how
+  your neural network is trained? Illustrate your answer by training your
+  model using different numbers of hidden layer nodes. Provide plots showing the decision boundaries learned by your model for different settings of the number of nodes in the hidden layer. <b>(10 pts)</b>
+<br><br>
+<strong>Digit Classification</strong>
+<br><br>
+<p>The digits dataset consists of images of the digits (0-9). Each sample is an 8 pixel by 8 pixel image (visualized below). The dataset consists of 4 files:
+  <ul> 
+    <li>X_train.csv: An array of images (where each row represents an 8x8 image flattened into a 64-d vector).
+    <li>y_train.csv: An array of ground truth labels (0-9) corresponding to X_train.
+    <li>X_test.csv: An array of images (where each row represents an 8x8 image flattened into a 64-d vector).
+    <li>y_test.csv: An array of ground truth labels (0-9) corresponding to X_test.
+  </ul></p>
+
+<img src="DATA/Digits/digits.png" alt="Digits" style="width:582px;height:383px;">
+<li> Train your Logistic Regression Classifier to classify digits using the files X_train and y_train. Evaluate the classifier performance on the test set (X_test) by computing the average classification accuracy along with a confusion matrix. <b>(20 pts)</b>
+<li> Train your Neural Network to classify digits using the files X_train and y_train. Evaluate the classifier performance on the test set (X_test) by computing the average classification accuracy along with a confusion matrix. Compare the performance of your neural network classifier with your logistic regression classifier. <b>(20 pts)</b>  
+</ol> 
+
+
+<strong> Submission </strong>
+
+The programming assignment, along with the webpage report, should be made into a
+.zip file and submitted using gsubmit. 
+
+
+<P>
+<table ALIGN="right"  BORDER="4">
+<tr>
+<td>
+
+<ADDRESS><FONT SIZE="-1"><A href="http://www.cs.bu.edu/faculty/betke">
+ Margrit Betke,  Professor </a> </FONT> </ADDRESS>
+<ADDRESS><FONT SIZE="-1"><A href="http://cs-www.bu.edu/Home.html">
+Computer Science Department </a> </FONT> </ADDRESS>
+<ADDRESS><FONT SIZE="-1">Email: <A href="mailto:betke@cs.bu.edu">
+betke@cs.bu.edu </a>  </FONT> </ADDRESS>
+
+</td>
+</tr>
+</table>
+
+</td> </tr> </table>
+
+</BODY>
+</HTML>
