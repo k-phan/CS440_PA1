@@ -1,5 +1,5 @@
 """
-LogisticRegression.py
+NeuralNet.py
 
 CS440/640: Lab-Week5
 
@@ -9,7 +9,7 @@ Lab goal: 1) Implement logistic regression classifier
 import numpy as np 
 import matplotlib.pyplot as plt 
 
-class LogisticRegression:
+class NeuralNet:
     """
     This class implements a Logistic Regression Classifier.
     """
