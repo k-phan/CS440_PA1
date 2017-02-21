@@ -95,6 +95,18 @@ def plot_decision_boundary(model, X, y):
 
 ################################################################################    
 
+#1. Load data
+X = np.genfromtxt('DATA/Linear/X.csv', delimiter=',')
+y = np.genfromtxt('DATA/Linear/y.csv', delimiter=',')
+
+#2. plot data
+plt.scatter(X[:,0], X[:,1], c=y, cmap=plt.cm.bwr)
+plt.show()
+
+#3. Initialize Logistic Regression object
+#input_dim = 0
+#output_dim = 0
+#LR = LogisticRegressio(input_dim, output_dim)
 
             
     
