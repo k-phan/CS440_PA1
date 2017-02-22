@@ -40,8 +40,21 @@ class LogisticRegression:
         returns:
             cost: average cost per data sample
         """
-        #TODO:
-        return 0
+        z = np.dot(X,self.theta) + self.bias
+        exp_z = np.exp(z)
+        softmax_scores = exp_z / np.sum(exp_z, axis=1, keepdims=True)
+        
+        # Only the output of the correct class label contributes to the cost
+        runningCost = 0
+        
+        for i in range(len(X)):
+            yHot = np.zeros(self.bias)
+            yHot[y[i]] = 1
+            runningCost -= np.sum(yHot * np.log(softmax_scores[i]))
+               
+        avgCostPerSample = runningCost/len(X)   
+         
+        return avgCostPerSample
 
     
     #--------------------------------------------------------------------------
@@ -104,9 +117,10 @@ plt.scatter(X[:,0], X[:,1], c=y, cmap=plt.cm.bwr)
 plt.show()
 
 #3. Initialize Logistic Regression object
-input_dim = y.size
+input_dim = len(X[0,])
 output_dim = 2
-LR = LogisticRegression(input_dim, output_dim)
+model = LogisticRegression(input_dim, output_dim)
+plot_decision_boundary(model, X, y)
 
             
     
