@@ -48,7 +48,7 @@ class LogisticRegression:
         runningCost = 0
         
         for i in range(len(X)):
-            yHot = np.zeros(self.bias)
+            yHot = np.zeros(self.bias.size)
             yHot[y[i]] = 1
             runningCost -= np.sum(yHot * np.log(softmax_scores[i]))
                
@@ -81,8 +81,31 @@ class LogisticRegression:
         """
         Learns model parameters to fit the data.
         """  
-        #TODO:
-        return 0
+        cost = self.compute_cost(X, y)
+        
+        for i in range(1000):   
+            # Need to compute softmax scores for X (foreward propagation)
+            z = np.dot(X,self.theta) + self.bias
+            exp_z = np.exp(z)
+            softmax_scores = exp_z / np.sum(exp_z, axis=1, keepdims=True)
+            
+            # SetUp OneHotY
+            yHot = np.zeros(X.shape)
+            for j in range(len(X)):
+                yHot[j,y[j]] = 1
+            
+            # backward propagation
+            gradient_weights = np.dot(np.transpose(X), softmax_scores - yHot)
+            gradient_biases = np.dot(np.ones(len(X)),softmax_scores - yHot)
+            
+            # Update model parameters
+            self.theta -= gradient_weights * 0.05 # learning rate as 5%
+            self.bias -= gradient_biases * 0.05
+            
+            # Argmax returns the index of the highest -> prediction
+            # predictions = np.argmax(softmax_scores, axis=1)
+            
+            
 
 #--------------------------------------------------------------------------
 #--------------------------------------------------------------------------
