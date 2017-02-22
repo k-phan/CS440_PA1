@@ -104,9 +104,9 @@ plt.scatter(X[:,0], X[:,1], c=y, cmap=plt.cm.bwr)
 plt.show()
 
 #3. Initialize Logistic Regression object
-#input_dim = 0
-#output_dim = 0
-#LR = LogisticRegressio(input_dim, output_dim)
+input_dim = y.size
+output_dim = 2
+LR = LogisticRegression(input_dim, output_dim)
 
             
     
