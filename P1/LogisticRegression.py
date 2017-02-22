@@ -99,6 +99,7 @@ def plot_decision_boundary(model, X, y):
     
     x1_array, x2_array = np.meshgrid(np.arange(-4, 4, 0.01), np.arange(-4, 4, 0.01))
     grid_coordinates = np.c_[x1_array.ravel(), x2_array.ravel()]
+    model.fit(X,y)
     Z = model.predict(grid_coordinates)
     Z = Z.reshape(x1_array.shape)
     plt.contourf(x1_array, x2_array, Z, cmap=plt.cm.bwr)
