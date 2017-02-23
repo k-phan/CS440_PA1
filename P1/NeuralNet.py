@@ -194,5 +194,5 @@ y = np.genfromtxt('DATA/NonLinear/y.csv', delimiter=',')
 # 2. Initialize Neural Network & Plot
 input_dim = len(X[0,])
 output_dim = 2
-model = NeuralNetworks(input_dim, output_dim, 0.001, 2)
+model = NeuralNetworks(input_dim, output_dim, 0.001, 8)
 plot_decision_boundary(model, X, y)
