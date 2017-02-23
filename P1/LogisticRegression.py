@@ -163,12 +163,35 @@ def plot_decision_boundary(model, X, y):
 
 ################################################################################    
 
+# Here below is for Linear Data
+
+##1. Load Data
+#X = np.genfromtxt('DATA/Linear/X.csv', delimiter=',')
+#y = np.genfromtxt('DATA/Linear/y.csv', delimiter=',')
+#
+##2. Initialize Logistic Regression Object
+#input_dim = len(X[0,])
+#output_dim = 10
+#model = LogisticRegression(input_dim, output_dim)
+#plot_decision_boundary(model, X, y)
+
+# Start here for Digits Data
+
 #1. Load Data
-X = np.genfromtxt('DATA/Linear/X.csv', delimiter=',')
-y = np.genfromtxt('DATA/Linear/y.csv', delimiter=',')
+X_train = np.genfromtxt('DATA/Digits/X_train.csv', delimiter=',')
+y_train = np.genfromtxt('DATA/Digits/y_train.csv', delimiter=',')
+X_test = np.genfromtxt('DATA/Digits/X_test.csv', delimiter=',')
+y_test = np.genfromtxt('DATA/Digits/y_test.csv', delimiter=',')
 
 #2. Initialize Logistic Regression Object
-input_dim = len(X[0,])
-output_dim = 2
+input_dim = len(X_train[0,])
+output_dim = 10
 model = LogisticRegression(input_dim, output_dim)
-plot_decision_boundary(model, X, y)
+
+#3 Fit and predict
+model.fit(X_train,y_train)
+Z = model.predict(X_test)
+correct = 0
+for i in range(len(Z)):
+    correct += (Z[i] == y_test[i])
+print "{:.1%}".format(float(correct)/float(len(Z)))
