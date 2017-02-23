@@ -13,6 +13,7 @@ import matplotlib.pyplot as plt
 """
 Although this is pretty much a given, it may be helpful to
 define the following in terms of readability later.
+NOTE: Could not decide between using sigmoid function vs. tanh (?)
 """
 
 # h(z) and its derivative
@@ -21,6 +22,12 @@ def h(z):
 
 def h_prime(z):
 	return np.exp(z)
+	
+# sigma test function
+def sigma(z):
+        return 1 / (1 + np.exp(-z))
+	
+	
 
 class NeuralNetworks:
 	"""
@@ -58,8 +65,6 @@ class NeuralNetworks:
 	def predict(self, X):
 		# Hard-code Forward Propagation
 		z1 = np.dot(X, self.w1) + self.b1
-
-		# TODO: Make sure h(z) is actually correct ...
 		a1 = np.tanh(z1)
 		z2 = np.dot(a1, self.w2) + self.b2
 
@@ -151,11 +156,12 @@ class NeuralNetworks:
 			current_cost = self.compute_cost(X, y)
 			diff_cost = current_cost - old_cost
 			iterations += 1
-			print(diff_cost)
 
 			# Break if Converge Value of 0.0001 or Iterations Too high
 			if abs(diff_cost) < 0.0001 or iterations > 5000:
 			    break
+			 
+		print(iterations)
 
 # -----------------------------------------------------------------------------
 # -----------------------------------------------------------------------------
@@ -182,11 +188,11 @@ def plot_decision_boundary(model, X, y):
 ################################################################################ 
 
 # 1. Load Data Here To Begin:
-X = np.genfromtxt('DATA/Linear/X.csv', delimiter=',')
-y = np.genfromtxt('DATA/Linear/y.csv', delimiter=',')
+X = np.genfromtxt('DATA/NonLinear/X.csv', delimiter=',')
+y = np.genfromtxt('DATA/NonLinear/y.csv', delimiter=',')
 
 # 2. Initialize Neural Network & Plot
 input_dim = len(X[0,])
 output_dim = 2
-model = NeuralNetworks(input_dim, output_dim, 0.01, 8)
+model = NeuralNetworks(input_dim, output_dim, 0.001, 2)
 plot_decision_boundary(model, X, y)

@@ -135,7 +135,7 @@ class LogisticRegression:
             diff_cost = current_cost - old_cost
             iterations += 1
             
-            # break if converge value of 0.001 OR iterations go too high
+            # break if converge value of 0.0001 OR iterations go too high
             if abs(diff_cost) < 0.0001 or iterations > 10000:
                 break
 
