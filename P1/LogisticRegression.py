@@ -116,7 +116,6 @@ class LogisticRegression:
         
         # safety for while loop
         iterations = 0
-        #for i in range(1000):
         while True:   
             # Need to compute softmax scores for X
             z = np.dot(X,self.theta) + self.bias
