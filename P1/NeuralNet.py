@@ -1,15 +1,15 @@
 """
 NeuralNet.py
 
-CS440/640: Lab-Week5
+CS440/640: PA1
 
-Lab goal: 1) Implement logistic regression classifier
+Nick Mauro, Khai Phan, Michael Deng
 """
 
 import numpy as np 
 import matplotlib.pyplot as plt 
 
-class NeuralNet:
+class LogisticRegression:
     """
     This class implements a Logistic Regression Classifier.
     """
@@ -40,8 +40,18 @@ class NeuralNet:
         returns:
             cost: average cost per data sample
         """
-        #TODO:
-        return 0
+        z = np.dot(X,self.theta) + self.bias
+        exp_z = np.exp(z)
+        softmax_scores = exp_z / np.sum(exp_z, axis=1, keepdims=True)
+        cost_for_sample = 0
+        
+        for row in range(len(X)):
+            one_hot_y = np.zeros(len(y))
+            one_hot_y[int(y[row])] = 1
+            cost_for_sample += -1 * np.sum(one_hot_y * np.log(softmax_scores[row]))
+        
+        mean = cost_for_sample / len(X)
+        return mean
 
     
     #--------------------------------------------------------------------------
@@ -68,8 +78,21 @@ class NeuralNet:
         """
         Learns model parameters to fit the data.
         """  
-        #TODO:
-        return 0
+        cost = self.compute_cost(X, y)
+
+        for row in range(len(X)):
+            z = np.dot(X,self.theta) + self.bias
+            exp_z = np.exp(z)
+            softmax_scores = exp_z / np.sum(exp_z, axis=1, keepdims=True)
+            one_hot_y = np.zeros(X.shape)
+            
+            for i in range(len(X)):
+                one_hot_y[i, y[i]] = 1
+            
+            w = np.dot(np.transpose(X), softmax_scores - one_hot_y)
+            b = np.dot(np.ones(len(X)), softmax_scores - one_hot_y)
+            self.theta += -1 * w * 0.05
+            self.bias += -1 * b * 0.05
 
 #--------------------------------------------------------------------------
 #--------------------------------------------------------------------------
@@ -95,6 +118,11 @@ def plot_decision_boundary(model, X, y):
 
 ################################################################################    
 
-
+X = np.genfromtxt('DATA/Linear/X.csv', delimiter=',')
+y = np.genfromtxt('DATA/Linear/y.csv', delimiter=',')
+input_dim = len(X[0])
+output_dim = len(X[0])
+LR = LogisticRegression(input_dim, output_dim)
+plot_decision_boundary(LR, X, y)
             
     

@@ -1,9 +1,9 @@
 """
 LogisticRegression.py
 
-CS440/640: Lab-Week5
+CS440/640: PA1
 
-Lab goal: 1) Implement logistic regression classifier
+Nick Mauro, Khai Phan, Michael Deng
 """
 
 import numpy as np 
