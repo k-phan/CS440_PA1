@@ -103,8 +103,8 @@ def plot_decision_boundary(model, X, y):
 
 ################################################################################    
 
-X = np.genfromtxt('DATA/LinearX.csv', delimiter=',')
-y = np.genfromtxt('DATA/Lineary.csv', delimiter=',')
+X = np.genfromtxt('DATA/Linear/X.csv', delimiter=',')
+y = np.genfromtxt('DATA/Linear/y.csv', delimiter=',')
 plt.scatter(X[:,0], X[:,1], c=y, cmap=plt.cm.bwr)
 plt.show()
 input_dim = len(X)
