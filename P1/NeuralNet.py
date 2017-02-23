@@ -196,7 +196,7 @@ def plot_decision_boundary(model, X, y):
 ## 2. Initialize Neural Network & Plot
 #input_dim = len(X[0,])
 #output_dim = 2
-#model = NeuralNetworks(input_dim, output_dim, 0.001, 1)
+#model = NeuralNetworks(input_dim, output_dim, 0.001, 3)
 #plot_decision_boundary(model, X, y)
 
 # Start here for Digits Data
