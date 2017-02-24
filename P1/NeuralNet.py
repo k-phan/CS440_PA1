@@ -2,7 +2,7 @@
 NeuralNet.py
 
 CS440/640: PA1
-Khai Phan, Michael Deng, Nick Mauro
+Khai Phan, Michael Deng, Nick Mauro, Stephanie Hsieh
 
 Assignment Part: "Neural Networks"
 """
