@@ -210,8 +210,7 @@ y_test = np.genfromtxt('DATA/Digits/y_test.csv', delimiter=',')
 #2. Initialize Logistic Regression Object
 input_dim = len(X_train[0,])
 output_dim = 10
-model = NeuralNetworks(input_dim, output_dim, 0.001, 3)
-
+model = NeuralNetworks(input_dim, output_dim, 0.001, 8)
 #3 Fit and predict
 model.fit(X_train,y_train)
 Z = model.predict(X_test)
