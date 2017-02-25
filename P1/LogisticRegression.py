@@ -166,8 +166,8 @@ def plot_decision_boundary(model, X, y):
 # Here below is for Linear Data
 
 ##1. Load Data
-#X = np.genfromtxt('DATA/Linear/X.csv', delimiter=',')
-#y = np.genfromtxt('DATA/Linear/y.csv', delimiter=',')
+#X = np.genfromtxt('DATA/NonLinear/X.csv', delimiter=',')
+#y = np.genfromtxt('DATA/NonLinear/y.csv', delimiter=',')
 #
 ##2. Initialize Logistic Regression Object
 #input_dim = len(X[0,])
@@ -187,7 +187,7 @@ y_test = np.genfromtxt('DATA/Digits/y_test.csv', delimiter=',')
 input_dim = len(X_train[0,])
 output_dim = 10
 model = LogisticRegression(input_dim, output_dim)
-
+#
 #3 Fit and predict
 model.fit(X_train,y_train)
 Z = model.predict(X_test)
@@ -195,3 +195,11 @@ correct = 0
 for i in range(len(Z)):
     correct += (Z[i] == y_test[i])
 print "{:.1%}".format(float(correct)/float(len(Z)))
+
+## For Confusion Matrix
+#model.fit(X_train, y_train)
+#Z = model.predict(X_test)
+#confusionMatrix = np.zeros((10,10))
+#for i in range(len(Z)):
+#    confusionMatrix[Z[i],int(y_test[i])] += 1
+#print(confusionMatrix)
