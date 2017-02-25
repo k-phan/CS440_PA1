@@ -195,3 +195,11 @@ plot_decision_boundary(model, X, y)
 #for i in range(len(Z)):
 #    correct += (Z[i] == y_test[i])
 #print "{:.1%}".format(float(correct)/float(len(Z)))
+
+## For Confusion Matrix
+#model.fit(X_train, y_train)
+#Z = model.predict(X_test)
+#confusionMatrix = np.zeros((10,10))
+#for i in range(len(Z)):
+#    confusionMatrix[Z[i],int(y_test[i])] += 1
+#print(confusionMatrix)

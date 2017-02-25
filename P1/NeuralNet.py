@@ -109,6 +109,8 @@ class NeuralNetworks:
 	def fit(self, X, y):
 		"""
 		Learns model parameters to fit the data.
+		costPlot variable and corresponding lines are used to plot answer to #4
+		They are commented out when unnecessary.
 		"""
 
 		# Initialize Ground Truth
@@ -119,7 +121,9 @@ class NeuralNetworks:
 
 		# Current Cost
 		current_cost = self.compute_cost(X, y)
-
+                
+                #costPlot = np.array([0, current_cost])
+		
 		# Safety For While Loop
 		iterations = 0
 		while True:
@@ -156,12 +160,15 @@ class NeuralNetworks:
 			current_cost = self.compute_cost(X, y)
 			diff_cost = current_cost - old_cost
 			iterations += 1
-
+			
+			#costPlot = np.vstack((costPlot, np.array([iterations,current_cost])))	
+			
 			# Break if Converge Value of 0.0001 or Iterations Too high
 			if abs(diff_cost) < 0.0001 or iterations > 5000:
 			    break
 			 
-		print(iterations)
+		#plt.scatter(costPlot[:,0],costPlot[:,1], s=10, cmap=plt.cm.Spectral)
+		#plt.show()
 
 # -----------------------------------------------------------------------------
 # -----------------------------------------------------------------------------
@@ -196,8 +203,9 @@ def plot_decision_boundary(model, X, y):
 ## 2. Initialize Neural Network & Plot
 #input_dim = len(X[0,])
 #output_dim = 2
-#model = NeuralNetworks(input_dim, output_dim, 0.001, 3)
+#model = NeuralNetworks(input_dim, output_dim, 0.001, 8)
 #plot_decision_boundary(model, X, y)
+
 
 # Start here for Digits Data
 
@@ -211,6 +219,7 @@ y_test = np.genfromtxt('DATA/Digits/y_test.csv', delimiter=',')
 input_dim = len(X_train[0,])
 output_dim = 10
 model = NeuralNetworks(input_dim, output_dim, 0.001, 8)
+
 #3 Fit and predict
 model.fit(X_train,y_train)
 Z = model.predict(X_test)
@@ -218,3 +227,13 @@ correct = 0
 for i in range(len(Z)):
     correct += (Z[i] == y_test[i])
 print "{:.1%}".format(float(correct)/float(len(Z)))
+
+## For Confusion Matrix
+#model.fit(X_train, y_train)
+#Z = model.predict(X_test)
+#confusionMatrix = np.zeros((10,10))
+#for i in range(len(Z)):
+#    confusionMatrix[Z[i],int(y_test[i])] += 1
+#print(confusionMatrix)
+#percentages = confusionMatrix / np.sum(confusionMatrix, axis=0, keepdims=True)
+#print(percentages)
