@@ -1,9 +1,10 @@
 """
 LogisticRegression.py
 
-CS440/640: Lab-Week5
+CS440/640: PA1
+Team Members: Khai Phan, Michael Deng, Nick Mauro
 
-Lab goal: 1) Implement logistic regression classifier
+Assignment Part: "Logistic Regression"
 """
 
 import numpy as np 
@@ -11,7 +12,8 @@ import matplotlib.pyplot as plt
 
 class LogisticRegression:
     """
-    This class implements a Logistic Regression Classifier.
+    This class implements a Multinomial Logistic Regression Classifier, using h(z) = exp(z), which
+    outputs K numbers, where K is the number of classes.
     """
     
     def __init__(self, input_dim, output_dim):
@@ -29,7 +31,7 @@ class LogisticRegression:
         
     #--------------------------------------------------------------------------
     
-    def compute_cost(self,X, y):
+    def compute_cost(self, X, y):
         """
         Computes the total cost on the dataset.
         
@@ -40,22 +42,38 @@ class LogisticRegression:
         returns:
             cost: average cost per data sample
         """
+
+        # Compute Dot Product of X and Theta, Summed With Biases:
+        # i.e. z1 = w1x1 + b1
+        # Thus, z is now (# samples by # classes array/matrix )
         z = np.dot(X,self.theta) + self.bias
+        
+        # Apply H(z) to each element of this matrix
         exp_z = np.exp(z)
+        
+        # Compute Softmax Scores are computed by scaling each element with the sum
+        # of each row
         softmax_scores = exp_z / np.sum(exp_z, axis=1, keepdims=True)
         
-        # Only the output of the correct class label contributes to the cost
+        # Only the Output of the CORRECT Class Label Contributes to the Cost
         runningCost = 0
         
-        for i in range(len(X)):
-            yHot = np.zeros(self.bias.size)
-            yHot[y[i]] = 1
-            runningCost -= np.sum(yHot * np.log(softmax_scores[i]))
-               
-        avgCostPerSample = runningCost/len(X)   
-         
+        # Let's make a one_hot_y array...
+        # The array should be sample by # classes 
+        one_hot_y = np.zeros((len(y), len(self.bias.T)))
+        
+        # Initialize this array with the proper hot ones
+        # while initializing, perform cost computation
+        length_y = len(y)
+        for i in range(length_y):
+            # This works because, the index of the hot one is whatever number
+            # of the correct classification
+            one_hot_y[i,int(y[i])] = 1
+            # add the one cost value that had contribution to runningCost
+            runningCost += -1 * np.sum(one_hot_y[i] * np.log(softmax_scores[i]))
+                      
+        avgCostPerSample = runningCost/len(X) 
         return avgCostPerSample
-
     
     #--------------------------------------------------------------------------
  
@@ -81,31 +99,44 @@ class LogisticRegression:
         """
         Learns model parameters to fit the data.
         """  
-        cost = self.compute_cost(X, y)
+
+        # Current Cost & Learning Rate
+        current_cost = self.compute_cost(X, y)
+        learning_rate = 0.01
         
-        for i in range(1000):   
-            # Need to compute softmax scores for X (foreward propagation)
+        # Initialize Ground Truth
+        one_hot_y = np.zeros((len(y), len(self.bias.T)))
+        length_y = len(y)
+        for i in range(length_y):
+            # This works because, the index of the hot one is whatever number
+            # of the correct classification
+            one_hot_y[i,int(y[i])] = 1
+        
+        # safety for while loop
+        iterations = 0
+        while True:   
+            # Need to compute softmax scores for X
             z = np.dot(X,self.theta) + self.bias
             exp_z = np.exp(z)
             softmax_scores = exp_z / np.sum(exp_z, axis=1, keepdims=True)
+        
+            # Compute Gradients & update weights/biases
+            gradient_weights = np.dot(X.T, softmax_scores - one_hot_y)
+            gradient_biases = np.dot(np.ones(len(X)), softmax_scores - one_hot_y)
             
-            # SetUp OneHotY
-            yHot = np.zeros(X.shape)
-            for j in range(len(X)):
-                yHot[j,y[j]] = 1
+            self.theta -= gradient_weights * learning_rate
+            self.bias -= gradient_biases * learning_rate
             
-            # backward propagation
-            gradient_weights = np.dot(np.transpose(X), softmax_scores - yHot)
-            gradient_biases = np.dot(np.ones(len(X)),softmax_scores - yHot)
+            # compute cost change
+            old_cost = current_cost
+            current_cost = self.compute_cost(X, y)
+            diff_cost = current_cost - old_cost
+            iterations += 1
             
-            # Update model parameters
-            self.theta -= gradient_weights * 0.05 # learning rate as 5%
-            self.bias -= gradient_biases * 0.05
-            
-            # Argmax returns the index of the highest -> prediction
-            # predictions = np.argmax(softmax_scores, axis=1)
-            
-            
+            # break if converge value of 0.0001 OR iterations go too high
+            if abs(diff_cost) < 0.0001 or iterations > 10000:
+                break
+
 
 #--------------------------------------------------------------------------
 #--------------------------------------------------------------------------
@@ -129,22 +160,37 @@ def plot_decision_boundary(model, X, y):
     plt.scatter(X[:, 0], X[:, 1], c=y, cmap=plt.cm.bwr)
     plt.show()
 
-
 ################################################################################    
 
-#1. Load data
-X = np.genfromtxt('DATA/Linear/X.csv', delimiter=',')
-y = np.genfromtxt('DATA/Linear/y.csv', delimiter=',')
+# Here below is for Linear Data
 
-#2. plot data
-plt.scatter(X[:,0], X[:,1], c=y, cmap=plt.cm.bwr)
-plt.show()
+##1. Load Data
+#X = np.genfromtxt('DATA/Linear/X.csv', delimiter=',')
+#y = np.genfromtxt('DATA/Linear/y.csv', delimiter=',')
+#
+##2. Initialize Logistic Regression Object
+#input_dim = len(X[0,])
+#output_dim = 10
+#model = LogisticRegression(input_dim, output_dim)
+#plot_decision_boundary(model, X, y)
 
-#3. Initialize Logistic Regression object
-input_dim = len(X[0,])
-output_dim = 2
+# Start here for Digits Data
+
+#1. Load Data
+X_train = np.genfromtxt('DATA/Digits/X_train.csv', delimiter=',')
+y_train = np.genfromtxt('DATA/Digits/y_train.csv', delimiter=',')
+X_test = np.genfromtxt('DATA/Digits/X_test.csv', delimiter=',')
+y_test = np.genfromtxt('DATA/Digits/y_test.csv', delimiter=',')
+
+#2. Initialize Logistic Regression Object
+input_dim = len(X_train[0,])
+output_dim = 10
 model = LogisticRegression(input_dim, output_dim)
-plot_decision_boundary(model, X, y)
 
-            
-    
+#3 Fit and predict
+model.fit(X_train,y_train)
+Z = model.predict(X_test)
+correct = 0
+for i in range(len(Z)):
+    correct += (Z[i] == y_test[i])
+print "{:.1%}".format(float(correct)/float(len(Z)))

@@ -1,78 +1,172 @@
 """
 NeuralNet.py
 
-CS440/640: Lab-Week5
 
-Lab goal: 1) Implement logistic regression classifier
+=======
+CS440/640: PA1
+Khai Phan, Michael Deng, Nick Mauro
+
+Assignment Part: "Neural Networks"
 """
 
-import numpy as np 
-import matplotlib.pyplot as plt 
+import numpy as np
+import matplotlib.pyplot as plt
 
-class NeuralNet:
-    """
-    This class implements a Logistic Regression Classifier.
-    """
-    
-    def __init__(self, input_dim, output_dim):
-        """
-        Initializes the parameters of the logistic regression classifer to 
-        random values.
-        
-        args:
-            input_dim: Number of dimensions of the input data
-            output_dim: Number of classes
-        """
-        
-        self.theta = np.random.randn(input_dim, output_dim) / np.sqrt(input_dim)
-        self.bias = np.zeros((1, output_dim))
-        
-    #--------------------------------------------------------------------------
-    
-    def compute_cost(self,X, y):
-        """
-        Computes the total cost on the dataset.
-        
-        args:
-            X: Data array
-            y: Labels corresponding to input data
-        
-        returns:
-            cost: average cost per data sample
-        """
-        #TODO:
-        return 0
+"""
+Although this is pretty much a given, it may be helpful to
+define the following in terms of readability later.
+NOTE: Could not decide between using sigmoid function vs. tanh (?)
+"""
 
-    
-    #--------------------------------------------------------------------------
- 
-    def predict(self,X):
-        """
-        Makes a prediction based on current model parameters.
-        
-        args:
-            X: Data array
-            
-        returns:
-            predictions: array of predicted labels
-        """
-        z = np.dot(X,self.theta) + self.bias
-        exp_z = np.exp(z)
-        softmax_scores = exp_z / np.sum(exp_z, axis=1, keepdims=True)
-        predictions = np.argmax(softmax_scores, axis = 1)
-        return predictions
-        
-    #--------------------------------------------------------------------------
-    
-    def fit(self,X,y):
-        """
-        Learns model parameters to fit the data.
-        """  
-        #TODO:
-        return 0
+# h(z) and its derivative
+def h(z):
+	return np.exp(z)
 
-#--------------------------------------------------------------------------
-#--------------------------------------------------------------------------
+def h_prime(z):
+	return np.exp(z)
+	
+# sigma test function
+def sigma(z):
+        return 1 / (1 + np.exp(-z))
+	
+	
+
+class NeuralNetworks:
+	"""
+	Implement a Neural Network w/ One Hidden Layer of varying
+	Number of nodes (in all three layers)
+	"""
+
+	"""
+	input/output dim = num. of inputs/outputs
+	learn_rate = learning rate for the gradient updates
+	hidden_dim = num. of nodes in hidden layer
+	"""
+
+	def __init__(self, input_dim, output_dim, learn_rate, hidden_dim):
+		# Let's Keep a Record of These, Shall We?
+		self.input_dim = input_dim
+		self.output_dim = output_dim
+		self.learn_rate = learn_rate
+		self.hidden_dim = hidden_dim
+
+		# Now, let's randomly initialize some weights & biases ...
+		# Note that this is hard-coded for a NN with 1 hidden layer
+		self.w1 = np.random.randn(input_dim, hidden_dim) / np.sqrt(input_dim)
+		self.b1 = np.zeros((1, hidden_dim))
+		self.w2 = np.random.randn(hidden_dim, output_dim) / np.sqrt(hidden_dim)
+		self.b2 = np.zeros((1, output_dim))
+
+	# --------------------------------------------------------------------------
+
+	"""
+	Taking predict LogisticRegression.py:
+	Purpose is to predict an output based on current weights/biases.
+	"""
+
+	def predict(self, X):
+		# Hard-code Forward Propagation
+		z1 = np.dot(X, self.w1) + self.b1
+		a1 = np.tanh(z1)
+		z2 = np.dot(a1, self.w2) + self.b2
+
+		# Output Layer
+		scores = h(z2)
+		softmax_scores = scores / np.sum(scores, axis=1, keepdims=True)
+
+		# Returns Index of Largest Value!
+		predictions = np.argmax(softmax_scores, axis=1)
+		return predictions
+
+	# -------------------------------------------------------------------------
+
+	"""
+	Compute Cost Here
+	Modifying from LogisticRegression.py as well.
+	"""
+
+	def compute_cost(self, X, y):
+		# Forward Prop as in Predict
+		z1 = np.dot(X, self.w1) + self.b1
+		a1 = np.tanh(z1)
+		z2 = np.dot(a1, self.w2) + self.b2
+		
+		# Output Layer
+		scores = h(z2)
+		softmax_scores = scores / np.sum(scores, axis=1, keepdims=True)
+
+		# Calculate Cost
+		# Only calculate the correct one!
+		totalCost = 0
+		lenY = len(y)
+		for i in range(lenY):
+			# Wanted value happens to be the column index of sm_scores!
+			totalCost += -1 * np.log(softmax_scores[i, int(y[i])])
+
+		avgCostPerSample = totalCost / len(X)
+		return avgCostPerSample
+
+	# ------------------------------------------------------------------------
+
+	def fit(self, X, y):
+		"""
+		Learns model parameters to fit the data.
+		"""
+
+		# Initialize Ground Truth
+		lenY = len(y)
+		one_hot_y = np.zeros((lenY, self.output_dim))
+		for i in range(lenY):
+			one_hot_y[i, int(y[i])] = 1
+
+		# Current Cost
+		current_cost = self.compute_cost(X, y)
+
+		# Safety For While Loop
+		iterations = 0
+		while True:
+			# Need to Compute Softmax Scores
+			z1 = np.dot(X, self.w1) + self.b1
+			a1 = np.tanh(z1)
+			z2 = np.dot(a1, self.w2) + self.b2
+			scores = h(z2)
+			softmax_scores = scores / np.sum(scores, axis=1, keepdims=True)
+
+			"""
+			Compute Gradients -- Had Some Help w/ Logic Here
+			Diff Between SMScores & Ground Truth
+			http://neuralnetworksanddeeplearning.com/chap2.html
+			"""
+			delt_3 = softmax_scores
+			delt_3[range(lenY), y.astype(int)] -= 1
+			grad_w2 = np.dot(a1.T, delt_3)
+
+			# Dot Product with Column of 1s = SUM!
+			grad_b2 = np.sum(delt_3, axis=0, keepdims=True)
+			delt_2 = np.dot(delt_3, self.w2.T) * (1 - np.power(a1,2.0))
+			grad_w1 = np.dot(X.T, delt_2)
+			grad_b1 = np.sum(delt_2, axis=0, keepdims=True)
+
+			# Apply Gradient Descent Update
+			self.w2 += -1 * self.learn_rate * grad_w2
+			self.b2 += -1 * self.learn_rate * grad_b2
+			self.w1 += -1 * self.learn_rate * grad_w1
+			self.b1 += -1 * self.learn_rate * grad_b1
+
+			# Compute Cost Change
+			old_cost = current_cost
+			current_cost = self.compute_cost(X, y)
+			diff_cost = current_cost - old_cost
+			iterations += 1
+
+			# Break if Converge Value of 0.0001 or Iterations Too high
+			if abs(diff_cost) < 0.0001 or iterations > 5000:
+			    break
+			 
+		print(iterations)
+
+# -----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 
 def plot_decision_boundary(model, X, y):
     """
@@ -86,15 +180,46 @@ def plot_decision_boundary(model, X, y):
     
     x1_array, x2_array = np.meshgrid(np.arange(-4, 4, 0.01), np.arange(-4, 4, 0.01))
     grid_coordinates = np.c_[x1_array.ravel(), x2_array.ravel()]
+    model.fit(X,y)
+
     Z = model.predict(grid_coordinates)
     Z = Z.reshape(x1_array.shape)
     plt.contourf(x1_array, x2_array, Z, cmap=plt.cm.bwr)
     plt.scatter(X[:, 0], X[:, 1], c=y, cmap=plt.cm.bwr)
     plt.show()
 
+################################################################################ 
 
-################################################################################    
+# Here below for Linear Data
 
+## 1. Load Data Here To Begin:
+#X = np.genfromtxt('DATA/NonLinear/X.csv', delimiter=',')
+#y = np.genfromtxt('DATA/NonLinear/y.csv', delimiter=',')
+#
+## 2. Initialize Neural Network & Plot
+#input_dim = len(X[0,])
+#output_dim = 2
+#model = NeuralNetworks(input_dim, output_dim, 0.001, 1)
+#plot_decision_boundary(model, X, y)
 
-            
-    
+# Start here for Digits Data
+
+#1. Load Data
+X_train = np.genfromtxt('DATA/Digits/X_train.csv', delimiter=',')
+y_train = np.genfromtxt('DATA/Digits/y_train.csv', delimiter=',')
+X_test = np.genfromtxt('DATA/Digits/X_test.csv', delimiter=',')
+y_test = np.genfromtxt('DATA/Digits/y_test.csv', delimiter=',')
+
+#2. Initialize Logistic Regression Object
+input_dim = len(X_train[0,])
+output_dim = 10
+model = NeuralNetworks(input_dim, output_dim, 0.001, 3)
+
+#3 Fit and predict
+model.fit(X_train,y_train)
+Z = model.predict(X_test)
+correct = 0
+for i in range(len(Z)):
+    correct += (Z[i] == y_test[i])
+print "{:.1%}".format(float(correct)/float(len(Z)))
+>>>>>>> working-code
