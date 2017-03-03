@@ -136,7 +136,7 @@ class LogisticRegression:
             iterations += 1
             
             # break if converge value of 0.0001 OR iterations go too high
-            if abs(diff_cost) < 0.0001 or iterations > 10000:
+            if abs(diff_cost) < 0.0001 or iterations > 5000:
                 break
 
 #--------------------------------------------------------------------------
@@ -165,15 +165,15 @@ def plot_decision_boundary(model, X, y):
 
 # Here below is for Linear Data
 
-#1. Load Data
-X = np.genfromtxt('DATA/NonLinear/X.csv', delimiter=',')
-y = np.genfromtxt('DATA/NonLinear/y.csv', delimiter=',')
-
-#2. Initialize Logistic Regression Object
-input_dim = len(X[0,])
-output_dim = 10
-model = LogisticRegression(input_dim, output_dim)
-plot_decision_boundary(model, X, y)
+##1. Load Data
+#X = np.genfromtxt('DATA/NonLinear/X.csv', delimiter=',')
+#y = np.genfromtxt('DATA/NonLinear/y.csv', delimiter=',')
+#
+##2. Initialize Logistic Regression Object
+#input_dim = len(X[0,])
+#output_dim = 2
+#model = LogisticRegression(input_dim, output_dim)
+#plot_decision_boundary(model, X, y)
 
 # Start here for Digits Data
 
@@ -195,7 +195,7 @@ plot_decision_boundary(model, X, y)
 #for i in range(len(Z)):
 #    correct += (Z[i] == y_test[i])
 #print "{:.1%}".format(float(correct)/float(len(Z)))
-
+#
 ## For Confusion Matrix
 #model.fit(X_train, y_train)
 #Z = model.predict(X_test)
